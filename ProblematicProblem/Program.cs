@@ -6,17 +6,19 @@ namespace ProblematicProblem
 {
     public class Program
     {
-        static Random rng;
-        static bool cont = true;
-
+        static Random rng = new Random();
         private static List<string> activities = new List<string>()
-            { "Movies", "Paintball", "Bowling", "Lazer Tag", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
+        { "Movies", "Paintball", "Bowling", "Lazer Tag", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
 
         static void Main(string[] args)
         {
             Console.Write(
                 "Hello, welcome to the random activity generator! \nWould you like to generate a random activity? yes/no: ");
-            bool cont = bool.Parse(Console.ReadLine());
+            string input = Console.ReadLine().Trim().ToLower();
+            bool cont = input == "yes"; 
+
+            if (!cont) return; 
+
             Console.WriteLine();
             Console.Write("We are going to need your information first! What is your name? ");
             string userName = Console.ReadLine();
@@ -25,33 +27,39 @@ namespace ProblematicProblem
             int userAge = int.Parse(Console.ReadLine());
             Console.WriteLine();
             Console.Write("Would you like to see the current list of activities? Sure/No thanks: ");
-            bool seeList = bool.Parse(Console.ReadLine());
+            input = Console.ReadLine().Trim().ToLower();
+            bool seeList = input == "sure";
+
             if (seeList)
             {
+                Console.WriteLine("\nHere are the current activities:");
                 foreach (string activity in activities)
                 {
                     Console.Write($"{activity} ");
-                    Thread.Sleep(250);
+                    Thread.Sleep(250); 
                 }
 
                 Console.WriteLine();
                 Console.Write("Would you like to add any activities before we generate one? yes/no: ");
-                bool addToList = bool.Parse(Console.ReadLine());
-                Console.WriteLine();
+                input = Console.ReadLine().Trim().ToLower();
+                bool addToList = input == "yes";
+
                 while (addToList)
                 {
                     Console.Write("What would you like to add? ");
                     string userAddition = Console.ReadLine();
                     activities.Add(userAddition);
+                    Console.WriteLine("\nUpdated activities list:");
                     foreach (string activity in activities)
                     {
                         Console.Write($"{activity} ");
-                        Thread.Sleep(250);
+                        Thread.Sleep(250); 
                     }
 
                     Console.WriteLine();
-                    Console.WriteLine("Would you like to add more? yes/no: ");
-                    addToList = bool.Parse(Console.ReadLine());
+                    Console.Write("Would you like to add more? yes/no: ");
+                    input = Console.ReadLine().Trim().ToLower();
+                    addToList = input == "yes";
                 }
             }
 
@@ -75,7 +83,8 @@ namespace ProblematicProblem
                 Console.WriteLine();
                 int randomNumber = rng.Next(activities.Count);
                 string randomActivity = activities[randomNumber];
-                if (userAge > 21 && randomActivity == "Wine Tasting")
+
+                if (userAge < 21 && randomActivity == "Wine Tasting")
                 {
                     Console.WriteLine($"Oh no! Looks like you are too young to do {randomActivity}");
                     Console.WriteLine("Pick something else!");
@@ -84,11 +93,12 @@ namespace ProblematicProblem
                     randomActivity = activities[randomNumber];
                 }
 
-                Console.Write($"Ah got it! {randomActivity}, your random activity is: {userName}! Is this ok or do you want to grab another activity? Keep/Redo: ");
-                Console.WriteLine();
-                cont = bool.Parse(Console.ReadLine());
-            }
+                Console.WriteLine($"Ah got it! {randomActivity}, your random activity is: {userName}!");
+                Console.Write("Is this ok or do you want to grab another activity? Keep/Redo: ");
+                input = Console.ReadLine().Trim().ToLower();
 
+                cont = input == "redo";
+            }
         }
     }
-}    
+}
